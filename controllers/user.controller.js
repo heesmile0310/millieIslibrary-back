@@ -12,7 +12,9 @@ const signUp = async (req, res) => {
 
     Object.keys(REQUIRED_KEYS).map(key => {
       if (!REQUIRED_KEYS[key]) {
-        throw new Error(`KEY_ERROR: ${key}`);
+        const error = new Error(`KEY_ERROR: ${key}`);
+        error.statusCode = 400;
+        throw error;
       }
     });
     await userService.signUp(email, password, nickname);
@@ -35,7 +37,9 @@ const login = async (req, res) => {
 
     Object.keys(REQUIRED_KEYS).map(key => {
       if (!REQUIRED_KEYS[key]) {
-        throw new Error(`KEY_ERROR: ${key}`);
+        const error = new Error(`KEY_ERROR: ${key}`);
+        error.statusCode = 400;
+        throw error;
       }
     });
     const token = await userService.login(email, password);
