@@ -14,3 +14,11 @@ myDataSource.initialize().then(() => {
 });
 
 module.exports = myDataSource;
+
+/*
+사용방법:
+Dao단에서
+const myDataSource = require('../models/index');
+코드 작성후 불러와서 해당 쿼리문 작성하시면 됩니다.
+
+*/
