@@ -11,28 +11,30 @@ const signUp = async (email, hashedPw, nickname) => {
 
 const login = async email => {
   const [userInfo] = await myDataSource.query(`
-    SELECT * FROM users 
-    WHERE email ="${email}"`);
+    SELECT * FROM
+      users 
+    WHERE
+      email ="${email}"`);
 
   return userInfo;
 };
 
-const changeUserInfo = async (password, nickname, user_id) => {
+const changeUserInfo = async (hashedPw, nickname, user_id) => {
   await myDataSource.query(`
   UPDATE 
-    postings 
+    users 
   SET
-    password = "${password}",
+    password = "${hashedPw}",
     nickname = "${nickname}"
   WHERE 
-    user_id = ${user_id}
+    id = ${user_id}
 `);
 };
 
 const withdrawUser = async user_id => {
   await myDataSource.query(`
     DELETE FROM users
-    WHERE user_id = ${user_id}
+    WHERE id = ${user_id}
   `);
 };
 

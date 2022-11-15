@@ -38,7 +38,7 @@ const login = async (email, password) => {
     throw error;
   }
 
-  const userInfo = await userDao.loginUser(email);
+  const userInfo = await userDao.login(email);
   if (!userInfo) {
     const error = new Error("User doesn't exist");
     error.statusCode = 404;
@@ -51,7 +51,6 @@ const login = async (email, password) => {
     error.statusCode = 400;
     throw error;
   }
-
   const token = jwt.sign({ id: userInfo.id }, jwtSecret);
   return token;
 };
@@ -63,11 +62,14 @@ const changeUserInfo = async (password, nickname, token) => {
     error.status = 400;
     throw error;
   }
+  const salt = bcrypt.genSaltSync();
+
+  const hashedPw = bcrypt.hashSync(password, salt);
 
   const user = jwt.verify(token, jwtSecret);
   const user_id = user.id;
 
-  await userDao.changeUserInfo(password, nickname, user_id);
+  await userDao.changeUserInfo(hashedPw, nickname, user_id);
 };
 
 const withdrawUser = async token => {

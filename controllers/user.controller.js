@@ -3,7 +3,7 @@ const userService = require('../services/user.service');
 const signUp = async (req, res) => {
   try {
     const { email, password, nickname } = req.body;
-
+    console.log(email);
     const REQUIRED_KEYS = {
       email,
       password,
@@ -15,10 +15,13 @@ const signUp = async (req, res) => {
         throw new Error(`KEY_ERROR: ${key}`);
       }
     });
-    const result = await createUserService.signUp(email, password, nickname);
+    await userService.signUp(email, password, nickname);
 
-    res.status(201).json({ message: `${email} signup success"` });
-  } catch (err) {}
+    res.status(201).json({ message: `${email} signup success` });
+  } catch (err) {
+    console.log(err);
+    res.status(err.statusCode).json({ message: err.message });
+  }
 };
 
 const login = async (req, res) => {
@@ -60,6 +63,7 @@ const withdrawUser = async (req, res) => {
   try {
     const { token } = req.headers;
     await userService.withdrawUser(token);
+    res.status(200).json({ message: 'User withdraw success' });
   } catch (err) {
     console.log(err);
     res.status(err.statusCode).json({ message: err.message });
