@@ -1,4 +1,4 @@
-const dataSource = require('./database');
+const dataSource = require('.');
 
 const createCategory = async category => {
   const insertStatus = await dataSource.query(

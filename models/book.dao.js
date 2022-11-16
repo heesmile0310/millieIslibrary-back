@@ -1,4 +1,4 @@
-const dataSource = require('./database');
+const dataSource = require('.');
 
 const createBook = async (title, coverImg, toc, introduction, categoryId) => {
   const insertStatus = await dataSource.query(

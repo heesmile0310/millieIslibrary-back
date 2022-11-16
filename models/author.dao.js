@@ -1,4 +1,4 @@
-const dataSource = require('./database');
+const dataSource = require('.');
 
 const createAuthor = async (authorName, authorIntro) => {
   const insertStatus = await dataSource.query(
