@@ -9,7 +9,7 @@ table users as u {
 
 table books as b {
   id int [pk, increment, not null]
-  title varchar(100) [not null]
+  title varchar(250) [not null]
   cover_img varchar(250) [not null]
   table_of_contents varchar (10000) [null]
   introduction varchar(3000) [not null]
