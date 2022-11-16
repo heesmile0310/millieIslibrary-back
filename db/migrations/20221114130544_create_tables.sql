@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `nickname` varchar(50) UNIQUE NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) UNIQUE NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `books` (
@@ -16,24 +16,24 @@ CREATE TABLE IF NOT EXISTS `books` (
   `table_of_contents` varchar(10000),
   `introduction` varchar(3000) NOT NULL,
   `categories_id` int NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `authors` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `author_name` varchar(50) NOT NULL,
   `author_intro` varchar(3000) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `books_authors` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `authors_id` int NOT NULL,
   `books_id` int NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `reviews` (
@@ -41,15 +41,15 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `content` varchar(300) NOT NULL,
   `books_id` int NOT NULL,
   `users_id` int NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `content` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+  `content` varchar(100) NOT NULL UNIQUE,
+  `created_at` DATETIME NOT NULL DEFAULT (now()),
+  `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `favorites` (
