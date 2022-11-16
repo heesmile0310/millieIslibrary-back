@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "db": "nodemon openapi.js"
+    "db": "nodemon ./db/openapi/createbookdata.js"
   },
   "author": "",
   "license": "ISC",
