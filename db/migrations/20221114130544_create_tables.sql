@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `cover_img` varchar(250) NOT NULL,
   `table_of_contents` varchar(10000),
   `introduction` varchar(3000) NOT NULL,
+  `categories_id` int NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT (now()),
   `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
@@ -51,14 +52,6 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE IF NOT EXISTS `books_categories` (
-  `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `books_id` int NOT NULL,
-  `categories_id` int NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT (now()),
-  `updated_at` timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
-);
-
 CREATE TABLE IF NOT EXISTS `favorites` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `users_id` int NOT NULL,
@@ -83,9 +76,7 @@ ALTER TABLE `reviews` ADD FOREIGN KEY (`books_id`) REFERENCES `books` (`id`);
 
 ALTER TABLE `reviews` ADD FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `books_categories` ADD FOREIGN KEY (`books_id`) REFERENCES `books` (`id`);
-
-ALTER TABLE `books_categories` ADD FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`);
+ALTER TABLE `books` ADD FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`);
 
 ALTER TABLE `favorites` ADD FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
 
