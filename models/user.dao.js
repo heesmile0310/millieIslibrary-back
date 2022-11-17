@@ -38,4 +38,17 @@ const withdrawUser = async user_id => {
   `);
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser };
+const getMe = async user_id => {
+  let userInfo = await myDataSource.query(`
+    SELECT
+      email, nickname
+    FROM
+      users
+    WHERE
+      id = ${user_id};
+  `);
+  console.log(userInfo);
+  return userInfo;
+};
+
+module.exports = { signUp, login, changeUserInfo, withdrawUser, getMe };

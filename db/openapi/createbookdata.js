@@ -25,7 +25,7 @@ const createBookData = async () => {
           return book;
         });
       });
-    return result;
+    console.log(result);
   } catch (err) {
     console.log(err);
   }
@@ -33,11 +33,11 @@ const createBookData = async () => {
 
 createBookData();
 
-//데이터 받아오는지 확인용
-// (async () => {
-//   console.log('before start');
+// 데이터 받아오는지 확인용
+(async () => {
+  console.log('before start');
 
-//   const result = await createBookData();
+  const result = await createBookData();
 
-//   console.log(result);
-// })();
+  console.log(result);
+})();

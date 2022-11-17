@@ -79,4 +79,11 @@ const withdrawUser = async token => {
   await userDao.withdrawUser(user_id);
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser };
+const getMe = async token => {
+  const user = jwt.verify(token, jwtSecret);
+  const user_id = user.id;
+
+  return await userDao.getMe(user_id);
+};
+
+module.exports = { signUp, login, changeUserInfo, withdrawUser, getMe };

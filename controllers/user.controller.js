@@ -74,4 +74,15 @@ const withdrawUser = async (req, res) => {
   }
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser };
+const getMe = async (req, res) => {
+  try {
+    const { token } = req.headers;
+    let userInfo = await userService.getMe(token);
+    res.status(200).json({ message: 'success', userInfo });
+  } catch (err) {
+    console.log(err);
+    res.status(err.statusCode).json({ message: err.message });
+  }
+};
+
+module.exports = { signUp, login, changeUserInfo, withdrawUser, getMe };
