@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `title` varchar(250) NOT NULL,
   `cover_img` varchar(250) NOT NULL,
-  `table_of_contents` varchar(10000),
+  `toc` varchar(10000),
   `introduction` varchar(3000) NOT NULL,
   `categories_id` int NOT NULL,
   `publish_time` varchar(100),
