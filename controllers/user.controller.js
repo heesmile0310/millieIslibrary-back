@@ -50,12 +50,12 @@ const login = async (req, res) => {
   }
 };
 
-const changeUserInfo = async (req, res) => {
+const updateInfo = async (req, res) => {
   try {
     const { password, nickname } = req.body;
     const { token } = req.headers;
     //나중에 oauth적용시 비밀번호는 Null 값이라 service단에서 Oauth로그인시 비밀번호 변경이 불가능하게 설정해야함
-    await userService.changeUserInfo(password, nickname, token);
+    await userService.updateInfo(password, nickname, token);
     res.status(200).json({ message: 'userinfo change sucess' });
   } catch (err) {
     console.log(err);
@@ -85,4 +85,4 @@ const getMe = async (req, res) => {
   }
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser, getMe };
+module.exports = { signUp, login, updateInfo, withdrawUser, getMe };

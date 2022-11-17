@@ -4,14 +4,14 @@ const router = express.Router();
 const {
   signUp,
   login,
-  changeUserInfo,
+  updateInfo,
   withdrawUser,
   getMe,
 } = require('../controllers/user.controller');
 
 router.post('/signup', signUp);
 router.post('/login', login);
-router.patch('/changeinfo', changeUserInfo);
+router.patch('/changeinfo', updateInfo);
 router.delete('/withdraw', withdrawUser);
 router.post('/info', getMe);
 
