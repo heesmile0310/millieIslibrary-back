@@ -2,8 +2,7 @@ const reviewDao = require('../models/review.dao');
 
 const createReview = async (user_id, books_id, content) => {
   try {
-    const result = await reviewDao.createReview(user_id, books_id, content);
-    return result;
+    return await reviewDao.createReview(user_id, books_id, content);
   } catch (err) {
     console.log(err);
     res.status(err.statusCode).json({ message: err.message });
@@ -12,8 +11,7 @@ const createReview = async (user_id, books_id, content) => {
 
 const updateReview = async (review_id, user_id, content) => {
   try {
-    const result = await reviewDao.updateReview(review_id, user_id, content);
-    return result;
+    return await reviewDao.updateReview(review_id, user_id, content);
   } catch (err) {
     console.log(err);
     res.status(err.statusCode).json({ message: err.message });

@@ -43,6 +43,7 @@ const findDetailByBookId = async id => {
       reviews: JSON.parse(item.reviews),
     };
   });
+  return result;
 };
 
 module.exports = { findDetailByBookId };
