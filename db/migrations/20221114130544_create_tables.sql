@@ -16,6 +16,10 @@ CREATE TABLE IF NOT EXISTS `books` (
   `table_of_contents` varchar(10000),
   `introduction` varchar(3000) NOT NULL,
   `categories_id` int NOT NULL,
+  `publish_time` varchar(100),
+  `publisher` varchar(100),
+  `page` int,
+  `rating_score` decimal(3,1),
   `created_at` DATETIME NOT NULL DEFAULT (now()),
   `updated_at` DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
