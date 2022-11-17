@@ -2,8 +2,18 @@ const bookServ = require('../services/book.service');
 const myUtil = require('../utils/myutil.js');
 
 async function createBook(req, res) {
-  const { title, coverImg, toc, introduction, category, author } = req.body;
-  const book = { title, coverImg, toc, introduction, category, author };
+  const book = ({
+    title,
+    author,
+    category,
+    coverImg,
+    introduction,
+    toc,
+    publishTime,
+    publisher,
+    ratingScore,
+    page,
+  } = req.body);
   myUtil.checkDataIsNotEmpty(book);
   await bookServ.createBook(book);
   res.json('생성 완료');

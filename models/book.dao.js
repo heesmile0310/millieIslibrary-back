@@ -1,6 +1,16 @@
 const dataSource = require('.');
 
-const createBook = async (title, coverImg, toc, introduction, categoryId) => {
+const createBook = async ({
+  title,
+  coverImg,
+  toc,
+  introduction,
+  categoryId,
+  publishTime,
+  publisher,
+  ratingScore,
+  page,
+}) => {
   const insertStatus = await dataSource.query(
     `
       INSERT INTO
@@ -8,15 +18,28 @@ const createBook = async (title, coverImg, toc, introduction, categoryId) => {
           (
             title,
             cover_img,
-            table_of_contents,
+            toc,
             introduction,
-            categories_id
+            categories_id,
+            publish_time,
+            publisher,
+            rating_score,
+            page
           )
       VALUES
-      (?, ?, ?, ?, ?)
-
+      (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
-    [title, coverImg, toc, introduction, categoryId]
+    [
+      title,
+      coverImg,
+      toc,
+      introduction,
+      categoryId,
+      publishTime,
+      publisher,
+      ratingScore,
+      page,
+    ]
   );
 
   return insertStatus;
