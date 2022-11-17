@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const dataSource = require('.');
+=======
+const myDataSource = require('../models/index');
+>>>>>>> 4d4e67e (Modify: review Delete 누락부분 재반영)
 
 // 리뷰 등록
 const createReview = async (user_id, books_id, content) => {
@@ -71,21 +75,23 @@ const deleteReview = async (review_id, user_id) => {
     SELECT * FROM reviews WHERE id=${review_id}
     `
   );
-  let check = String(checkReview[0].users_id);
-  console.log('check is ', check);
-  console.log('user_id =', user_id);
   //리뷰가 존재하지 않을 경우
   if (checkReview.length === 0) {
-    let result = 'REVIEW IS NOT EXIST';
-    return result;
+    return 'REVIEW IS NOT EXIST';
   } else if (
     //로그인한 사용자와 댓글 작성자가 다를 경우 에러 발생
-    check !== user_id
+    String(checkReview[0].users_id) !== user_id
   ) {
+<<<<<<< HEAD
     let result = 'ONLY WRITER CAN DELETE COMMENT';
     return result;
   } else if (check === user_id) {
     await dataSource.query(
+=======
+    return 'ONLY WRITER CAN DELETE COMMENT';
+  } else if (String(checkReview[0].users_id) === user_id) {
+    await myDataSource.query(
+>>>>>>> 4d4e67e (Modify: review Delete 누락부분 재반영)
       `
     DELETE FROM reviews WHERE id=${review_id}
     `

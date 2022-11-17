@@ -48,8 +48,8 @@ const deleteReview = async (req, res) => {
   try {
     // user_id = req.user_id; // validateToken용 user_id = 작성자의 id
     const { review_id, user_id } = req.body;
-    await reviewService.deleteReview(review_id, user_id);
-    res.status(200).json({ message: 'REVIEW DELETED' });
+    const result = await reviewService.deleteReview(review_id, user_id);
+    res.status(200).json({ message: result });
   } catch (err) {
     console.log(err.message);
     res.status(err.statusCode).json({ message: err.message });

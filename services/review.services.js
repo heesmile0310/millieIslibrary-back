@@ -22,7 +22,7 @@ const updateReview = async (review_id, user_id, content) => {
 
 const deleteReview = async (review_id, user_id) => {
   try {
-    await reviewDao.deleteReview(review_id, user_id);
+    return await reviewDao.deleteReview(review_id, user_id);
   } catch (err) {
     console.log(err);
     res.status(err.statusCode).json({ message: err.message });
