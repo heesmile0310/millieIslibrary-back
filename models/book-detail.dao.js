@@ -18,15 +18,22 @@ const findDetailByBookId = async id => {
         )
       ) AS books_authors	
     FROM books b
-    LEFT JOIN categories AS c 
-      ON b.categories_id = c.id
-    LEFT JOIN books_authors AS ba 
-      ON b.id = ba.books_id
-    LEFT JOIN authors AS a 
-      ON a.id = ba.authors_id
+    LEFT JOIN 
+      categories AS c 
+    ON 
+      b.categories_id = c.id
+    LEFT JOIN 
+      books_authors AS ba 
+    ON 
+      b.id = ba.books_id
+    LEFT JOIN 
+      authors AS a 
+    ON 
+      a.id = ba.authors_id
     WHERE b.id = ${id}
     `
   );
+
   bookResult = [...bookResult].map(item => {
     return {
       ...item,
@@ -34,58 +41,49 @@ const findDetailByBookId = async id => {
     };
   });
 
-  let reviewResult = await dataSource.query(
+  const reviewCount = await dataSource.query(
     `
-    WITH tables AS (
-      SELECT
-          b.id AS books_id,
-          COUNT(r.id) AS reviews_cnt
-      FROM
-          books b
-      RIGHT JOIN reviews r ON
-          b.id = r.books_id
-      WHERE
-        b.id = ${id} 
-          )
-      SELECT 
-        IFNULL(a.reviews_cnt, "0") AS reviews_cnt,
-          CONCAT(
-          	"[",
-            GROUP_CONCAT(
-              JSON_OBJECT(
-              "reviews_id", r.id,
-              "reviews_user_id", r.users_id,
-              "reviews_user_name", u.nickname,
-              "reviews_content", r.content,
-              "reviews_created_time", SUBSTRING(r.created_at, 1, 16),
-              "reviews_updated_time", SUBSTRING(r.updated_at, 1, 16)
-              ) ORDER BY r.created_at ASC
-            ),
-            "]"
-          ) AS reviewsInfo
-      FROM
-          books b
-      RIGHT JOIN reviews r 
-          ON
-        b.id = r.books_id
-      JOIN users u 
-          ON
-        r.users_id = u.id
-      JOIN tables a 
-          ON
-        a.books_id = b.id
-      WHERE
-        b.id = ${id}
+    SELECT
+      COUNT(r.id) AS reviews_cnt
+    FROM
+      books AS b
+    RIGHT JOIN 
+      reviews AS r 
+    ON
+      b.id = r.books_id
+    WHERE
+      b.id = ${id}
     `
   );
-  reviewResult = [...reviewResult].map(item => {
-    return {
-      ...item,
-      reviewsInfo: JSON.parse(item.reviewsInfo),
-    };
-  });
 
-  return { bookResult, reviewResult };
+  const reviewArray = await dataSource.query(
+    `
+    SELECT
+      r.id,
+      r.users_id,
+      u.nickname,
+      r.content,
+      SUBSTRING(r.created_at, 1, 16) AS created_at,
+      SUBSTRING(r.updated_at, 1, 16) AS updated_at
+    FROM
+      books AS b
+    RIGHT JOIN 
+      reviews AS r 
+    ON
+      b.id = r.books_id
+    JOIN 
+      users AS u 
+    ON
+      r.users_id = u.id
+    WHERE
+      b.id = ${id}
+    ORDER BY
+      r.created_at ASC
+    `
+  );
+  const reviewInfo = { reviewCount, reviewArray };
+
+  return { bookResult, reviewInfo };
 };
 
 // 찜하기, 담기 체크
