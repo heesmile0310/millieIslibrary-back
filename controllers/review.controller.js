@@ -2,7 +2,6 @@ const reviewService = require('../services/review.service');
 
 const createReview = async (req, res) => {
   try {
-    // user_id = req.user_id;  // validateToken 완성되면 user_id = 작성자의 id
     const { user_id, books_id, content } = req.body;
     // id = 게시물의 id
     if (!content) {
@@ -30,7 +29,6 @@ const createReview = async (req, res) => {
 
 const updateReview = async (req, res) => {
   try {
-    // user_id = req.user_id; // validateToken용 user_id = 작성자의 id
     const { review_id, user_id, content } = req.body;
     const result = await reviewService.updateReview(
       review_id,
@@ -46,7 +44,6 @@ const updateReview = async (req, res) => {
 
 const deleteReview = async (req, res) => {
   try {
-    // user_id = req.user_id; // validateToken용 user_id = 작성자의 id
     const { review_id, user_id } = req.body;
     const result = await reviewService.deleteReview(review_id, user_id);
     res.status(200).json({ message: result });

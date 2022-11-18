@@ -10,4 +10,14 @@ const findDetailByBookId = async id => {
   }
 };
 
-module.exports = { findDetailByBookId };
+// 찜하기 체크
+const checkFavoriteAndBookshelf = async (id, user_id) => {
+  try {
+    return await bookDetailDao.checkFavoriteAndBookshelf(id, user_id);
+  } catch (err) {
+    console.log(err);
+    res.status(err.statusCode).json({ message: err.message });
+  }
+};
+
+module.exports = { findDetailByBookId, checkFavoriteAndBookshelf };

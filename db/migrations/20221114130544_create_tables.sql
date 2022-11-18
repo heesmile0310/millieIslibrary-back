@@ -101,7 +101,6 @@ DROP TABLE authors;
 DROP TABLE books_authors;
 DROP TABLE reviews;
 DROP TABLE categories;
-DROP TABLE books_categories;
 DROP TABLE favorites;
 DROP TABLE bookshelves;
 
