@@ -1,0 +1,9 @@
+const express = require('express');
+const bookCtl = require('../controllers/book.controller');
+const { asyncWrap } = require('../utils/myutil');
+
+const router = express.Router();
+
+router.post('/', asyncWrap(bookCtl.createBook));
+
+module.exports = router;

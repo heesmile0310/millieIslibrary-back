@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "db": "nodemon ./db/openapi/createbookdata.js"
+    "db": "node ./db/openapi/createbookdata.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,11 +22,14 @@
     "typeorm": "^0.3.10"
   },
   "dependencies": {
+    "async-mutex": "^0.4.0",
     "bcryptjs": "^2.4.3",
+    "cli-color": "^2.0.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
+    "cli-color": "^2.0.3",
+    "dotenv": "^16.0.3",
     "mysql": "^2.18.1",
     "typeorm": "^0.3.10"
   }
