@@ -91,22 +91,22 @@ const checkFavoriteAndBookshelf = async (id, user_id) => {
   return await dataSource.query(
     `
     SELECT
-    EXISTS (
+	IF (EXISTS (
       SELECT
         id
       FROM
         favorites
       WHERE
         books_id = '${id}'
-        AND users_id = '${user_id}') AS check_favorite,
-    EXISTS (
+        AND users_id = '${user_id}')=1,'TRUE', 'FALSE') AS check_favorite,
+      IF (EXISTS (
       SELECT
         id
       FROM
         bookshelves
       WHERE
         books_id = '${id}'
-        AND users_id = '${user_id}') AS check_bookshef
+        AND users_id = '${user_id}')=1, 'TURE', 'FALSE') AS check_bookshef
     `
   );
 };
