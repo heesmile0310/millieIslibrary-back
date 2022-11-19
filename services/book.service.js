@@ -10,6 +10,7 @@ const createBook = async book => {
   const {
     title,
     author,
+    authorIntro,
     category,
     coverImg,
     introduction,
@@ -55,7 +56,7 @@ const createBook = async book => {
 
     if (!authorId) {
       // Create author Entity
-      authorId = (await authorDao.createAuthor(author, 'authorIntro')).insertId;
+      authorId = (await authorDao.createAuthor(author, authorIntro)).insertId;
     }
   });
 
