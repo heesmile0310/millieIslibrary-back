@@ -5,8 +5,20 @@ const mw = require('../middlewares/middleware');
 
 const reviewController = require('../controllers/review.controller');
 
-router.post('', asyncWrap(mw.authMiddleware), reviewController.createReview);
-router.patch('', asyncWrap(mw.authMiddleware), reviewController.updateReview);
-router.delete('', asyncWrap(mw.authMiddleware), reviewController.deleteReview);
+router.post(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.createReview)
+);
+router.patch(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.updateReview)
+);
+router.delete(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.deleteReview)
+);
 
 module.exports = router;

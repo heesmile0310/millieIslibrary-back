@@ -1,29 +1,28 @@
 const reviewDao = require('../models/review.dao');
 
 const createReview = async (user_id, books_id, content) => {
-  try {
-    return await reviewDao.createReview(user_id, books_id, content);
-  } catch (err) {
-    console.log(err);
-    res.status(err.statusCode).json({ message: err.message });
-  }
+  return await reviewDao.createReview(user_id, books_id, content);
 };
 
 const updateReview = async (review_id, user_id, content) => {
-  try {
+  const check = await reviewDao.checkReview(review_id, user_id, content);
+  if (!check[0]) {
+    throw { statusCode: 400, message: 'REVIEW IS NOT EXIST' };
+  } else if (check[0].users_id !== user_id) {
+    throw { statusCode: 400, message: 'ONLY WRITER CAN MODIFY COMMENT' };
+  } else {
     return await reviewDao.updateReview(review_id, user_id, content);
-  } catch (err) {
-    console.log(err);
-    res.status(err.statusCode).json({ message: err.message });
   }
 };
 
 const deleteReview = async (review_id, user_id) => {
-  try {
+  const check = await reviewDao.checkReview(review_id, user_id);
+  if (!check[0]) {
+    throw { statusCode: 400, message: 'REVIEW IS NOT EXIST' };
+  } else if (check[0].users_id !== user_id) {
+    throw { statusCode: 400, message: 'ONLY WRITER CAN DELETE COMMENT' };
+  } else {
     return await reviewDao.deleteReview(review_id, user_id);
-  } catch (err) {
-    console.log(err);
-    res.status(err.statusCode).json({ message: err.message });
   }
 };
 

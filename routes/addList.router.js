@@ -8,23 +8,23 @@ const addListController = require('../controllers/addList.controller');
 router.post(
   '/bookshelf',
   asyncWrap(mw.authMiddleware),
-  addListController.addBookshelf
+  asyncWrap(addListController.addBookshelf)
 );
 router.delete(
   '/bookshelf',
   asyncWrap(mw.authMiddleware),
-  addListController.removeBookshelf
+  asyncWrap(addListController.removeBookshelf)
 );
 
 router.post(
   '/favorite',
   asyncWrap(mw.authMiddleware),
-  addListController.addFavorite
+  asyncWrap(addListController.addFavorite)
 );
 router.delete(
   '/favorite',
   asyncWrap(mw.authMiddleware),
-  addListController.removeFavorite
+  asyncWrap(addListController.removeFavorite)
 );
 
 module.exports = router;

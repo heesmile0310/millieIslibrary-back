@@ -1,34 +1,34 @@
 const dataSource = require('.');
 
-// 담기 추가
-const addBookshelf = async (user_id, books_id) => {
-  const checkBookshelf = await dataSource.query(
+// 담기 체크
+const checkAddedBookshelf = async (user_id, books_id) => {
+  return await dataSource.query(
     `
     SELECT
-    EXISTS (
-    SELECT
-      id
+      id,
+      users_id
     FROM
       bookshelves
     WHERE
       books_id = '${books_id}'
-      AND users_id = '${user_id}') AS check_bookshelf
+      AND users_id = '${user_id}'
     `
   );
+};
 
-  const checkValue = Number(checkBookshelf[0].check_bookshelf);
-  if (checkValue === 0) {
-    await dataSource.query(
-      `
+// 담기 추가
+const addBookshelf = async (user_id, books_id) => {
+  await dataSource.query(
+    `
       INSERT
         bookshelves
       SET
         users_id = ${user_id},
         books_id = ${books_id}
       `
-    );
-    return await dataSource.query(
-      `
+  );
+  return await dataSource.query(
+    `
       SELECT
           bs.id,
           bs.users_id,
@@ -48,36 +48,13 @@ const addBookshelf = async (user_id, books_id) => {
         bs.users_id = ${user_id} AND bs.books_id = ${books_id}
   
       `
-    );
-  } else if (checkValue === 1) {
-    return `ALREADY BOOKSHELF ADDED`;
-  }
+  );
 };
 
 // 담기 취소
 const removeBookshelf = async (user_id, books_id) => {
-  const checkBookshelf = await dataSource.query(
+  await dataSource.query(
     `
-    SELECT
-      *
-    FROM
-      bookshelves
-    WHERE
-      users_id = ${user_id}
-      AND books_id = ${books_id}
-    `
-  );
-  // 담기가 존재하지 않을 경우
-  if (checkBookshelf.length === 0) {
-    return 'BOOKSHELF IS NOT EXIST';
-  } else if (
-    //로그인한 사용자와 담기 작성자가 다를 경우
-    checkBookshelf[0].users_id !== user_id
-  ) {
-    return 'ONLY OWNER CAN DELETE';
-  } else if (checkBookshelf[0].users_id === user_id) {
-    await dataSource.query(
-      `
       DELETE
       FROM
         bookshelves
@@ -85,40 +62,39 @@ const removeBookshelf = async (user_id, books_id) => {
         users_id = ${user_id}
         AND books_id = ${books_id}
       `
-    );
-    return 'BOOKSHELF IS REMOVED';
-  }
+  );
+  return 'BOOKSHELF IS REMOVED';
 };
 
-// 찜하기 추가
-const addFavorite = async (user_id, books_id) => {
-  const checkFavorite = await dataSource.query(
+// 찜하기 체크
+const checkAddedFavorite = async (user_id, books_id) => {
+  return await dataSource.query(
     `
     SELECT
-    EXISTS (
-    SELECT
-      id
+      id,
+      users_id
     FROM
       favorites
     WHERE
       books_id = '${books_id}'
-      AND users_id = '${user_id}') AS check_favorite
+      AND users_id = '${user_id}'
     `
   );
+};
 
-  const checkValue = Number(checkFavorite[0].check_favorite);
-  if (checkValue === 0) {
-    await dataSource.query(
-      `
+// 찜하기 추가
+const addFavorite = async (user_id, books_id) => {
+  await dataSource.query(
+    `
       INSERT
         favorites
       SET
         users_id = ${user_id},
         books_id = ${books_id}
       `
-    );
-    return await dataSource.query(
-      `
+  );
+  return await dataSource.query(
+    `
       SELECT
           f.id,
           f.users_id,
@@ -138,36 +114,13 @@ const addFavorite = async (user_id, books_id) => {
         f.users_id = ${user_id} AND f.books_id = ${books_id}
   
       `
-    );
-  } else if (checkValue === 1) {
-    return `ALREADY FAVORITE ADDED`;
-  }
+  );
 };
 
 // 찜하기 취소
 const removeFavorite = async (user_id, books_id) => {
-  const checkFavorite = await dataSource.query(
+  await dataSource.query(
     `
-    SELECT
-      *
-    FROM
-      favorites
-    WHERE
-      users_id = ${user_id}
-      AND books_id = ${books_id}
-    `
-  );
-  // 찜하기가 존재하지 않을 경우
-  if (checkFavorite.length === 0) {
-    return 'FAVORITE IS NOT EXIST';
-  } else if (
-    //로그인한 사용자와 찜하기 작성자가 다를 경우
-    checkFavorite[0].users_id !== user_id
-  ) {
-    return 'ONLY OWNER CAN DELETE';
-  } else if (checkFavorite[0].users_id === user_id) {
-    await dataSource.query(
-      `
       DELETE
       FROM
         favorites
@@ -175,9 +128,15 @@ const removeFavorite = async (user_id, books_id) => {
         users_id = ${user_id}
         AND books_id = ${books_id}
       `
-    );
-    return 'FAVORITE IS REMOVED';
-  }
+  );
+  return 'FAVORITE IS REMOVED';
 };
 
-module.exports = { addBookshelf, removeBookshelf, addFavorite, removeFavorite };
+module.exports = {
+  checkAddedBookshelf,
+  addBookshelf,
+  removeBookshelf,
+  checkAddedFavorite,
+  addFavorite,
+  removeFavorite,
+};

@@ -2,8 +2,7 @@ const bookDetailService = require('../services/book-detail.service');
 
 const findDetailByBookId = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await bookDetailService.findDetailByBookId(id);
+    const result = await bookDetailService.findDetailByBookId(req.params.id);
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
@@ -13,10 +12,9 @@ const findDetailByBookId = async (req, res) => {
 
 const checkFavoriteAndBookshelf = async (req, res) => {
   try {
-    const { id } = req.params;
     const user_id = req.userInfo.id;
     const result = await bookDetailService.checkFavoriteAndBookshelf(
-      id,
+      req.params.id,
       user_id
     );
     res.status(200).json(result);

@@ -5,11 +5,11 @@ const mw = require('../middlewares/middleware');
 
 const bookDetailController = require('../controllers/book-detail.controller');
 
-router.get('/:id', bookDetailController.findDetailByBookId);
+router.get('/:id', asyncWrap(bookDetailController.findDetailByBookId));
 router.get(
   '/:id/check-list',
   asyncWrap(mw.authMiddleware),
-  bookDetailController.checkFavoriteAndBookshelf
+  asyncWrap(bookDetailController.checkFavoriteAndBookshelf)
 );
 
 module.exports = router;
