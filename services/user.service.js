@@ -55,7 +55,7 @@ const login = async (email, password) => {
   return token;
 };
 
-const changeUserInfo = async (password, nickname, token) => {
+const updateInfo = async (password, nickname, token) => {
   if (password.length < 10) {
     //비밀번호가 10자리 이상만 가능 아니면 error 날림
     const error = new Error('Password-Invalid');
@@ -69,7 +69,7 @@ const changeUserInfo = async (password, nickname, token) => {
   const user = jwt.verify(token, jwtSecret);
   const user_id = user.id;
 
-  await userDao.changeUserInfo(hashedPw, nickname, user_id);
+  await userDao.updateInfo(hashedPw, nickname, user_id);
 };
 
 const withdrawUser = async token => {
@@ -79,4 +79,11 @@ const withdrawUser = async token => {
   await userDao.withdrawUser(user_id);
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser };
+const getMe = async token => {
+  const user = jwt.verify(token, jwtSecret);
+  const user_id = user.id;
+
+  return await userDao.getMe(user_id);
+};
+
+module.exports = { signUp, login, updateInfo, withdrawUser, getMe };
