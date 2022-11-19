@@ -11,9 +11,14 @@ const findDetailByBookId = async id => {
       b.introduction, 
       b.categories_id, 
       c.content AS categories_name,
+      b.publish_time,
+      b.publisher,
+      b.page,
+      b.rating_score,
       JSON_ARRAYAGG(
         JSON_OBJECT(
         "author_id", ba.authors_id,
+        "author_intro", a.author_intro,
         "author_name", SUBSTRING_INDEX(a.author_name, " ", 1)
         )
       ) AS books_authors	
@@ -59,7 +64,8 @@ const findDetailByBookId = async id => {
   const reviewArray = await dataSource.query(
     `
     SELECT
-      r.id,
+      r.id AS review_id,
+      b.id AS book_id,
       r.users_id,
       u.nickname,
       r.content,
@@ -106,7 +112,7 @@ const checkFavoriteAndBookshelf = async (id, user_id) => {
         bookshelves
       WHERE
         books_id = '${id}'
-        AND users_id = '${user_id}')=1, 'TURE', 'FALSE') AS check_bookshef
+        AND users_id = '${user_id}')=1, 'TURE', 'FALSE') AS check_bookshelf
     `
   );
 };

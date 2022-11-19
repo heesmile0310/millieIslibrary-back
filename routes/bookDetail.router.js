@@ -7,7 +7,7 @@ const bookDetailController = require('../controllers/book-detail.controller');
 
 router.get('/:id', bookDetailController.findDetailByBookId);
 router.get(
-  '/:id/check-favorite',
+  '/:id/check-list',
   asyncWrap(mw.authMiddleware),
   bookDetailController.checkFavoriteAndBookshelf
 );
