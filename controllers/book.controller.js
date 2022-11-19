@@ -5,6 +5,7 @@ async function createBook(req, res) {
   const book = ({
     title,
     author,
+    authorIntro,
     category,
     coverImg,
     introduction,
