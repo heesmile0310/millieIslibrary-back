@@ -14,11 +14,11 @@ function getRandomInt(max) {
 
 const storeData = (data, path) => {
   try {
-    fs.writeFileSync(path, JSON.stringify(data))
+    fs.writeFileSync(path, JSON.stringify(data));
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
+};
 
 function getbookListUrl(pageNumber) {
   return `https://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=${API_KEY}&QueryType=ItemNewSpecial&MaxResults=${booksNum}&start=${pageNumber}&SearchTarget=Book&output=js&Version=20131101`;
@@ -49,15 +49,16 @@ function convertFormat(aladinItem) {
 }
 // npm run db 명령어 사용시 books data 생성
 
-const postBook = async (book) => {
-  await axios.post(ORIGIN_URL + '/books', book)
-  .then(v => {
-    console.log(`worked`);
-  })
-  .catch(e => {
-    console.log(`something wrong`);
-  });
-}
+const postBook = async book => {
+  await axios
+    .post(ORIGIN_URL + '/books', book)
+    .then(v => {
+      console.log(`worked`);
+    })
+    .catch(e => {
+      console.log(`something wrong`);
+    });
+};
 
 const createBookData = async () => {
   let savingCount = 0;
@@ -72,7 +73,6 @@ const createBookData = async () => {
           continue;
         }
         storeData(responedBookDB, bookPath);
-
       } else {
         let rawdata = fs.readFileSync(bookPath);
         responedBookDB = JSON.parse(rawdata);
@@ -88,7 +88,7 @@ const createBookData = async () => {
     }
   }
   return;
-}
+};
 
 (async () => {
   await createBookData();
