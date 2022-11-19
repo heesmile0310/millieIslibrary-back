@@ -1,20 +1,13 @@
 const bookshelfService = require('../services/bookshelf.service');
+const myUtil = require('../utils/myutil');
 
 const addBookshelf = async (req, res) => {
   try {
-    const { user_id, books_id } = req.body;
-    // id = 게시물의 id
-    if (!user_id) {
-      const error = new Error('LOGIN NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
-    // book id가 없을 경우 에러 발생
-    if (!books_id) {
-      const error = new Error('VALID BOOKS_ID NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
+    const user_id = req.userInfo.id;
+    const { books_id } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      books_id,
+    });
     const result = await bookshelfService.addBookshelf(user_id, books_id);
     res.status(200).json({
       result,
@@ -28,7 +21,11 @@ const addBookshelf = async (req, res) => {
 
 const removeBookshelf = async (req, res) => {
   try {
-    const { user_id, books_id } = req.body;
+    const user_id = req.userInfo.id;
+    const { books_id } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      books_id,
+    });
     const result = await bookshelfService.removeBookshelf(user_id, books_id);
     res.status(200).json({ message: result });
   } catch (err) {

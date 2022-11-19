@@ -51,12 +51,13 @@ const updateReview = async (review_id, user_id, content) => {
       id='${review_id}'
     `
   );
+
   //리뷰가 없을 경우
   if (checkReview.length === 0) {
     return 'REVIEW IS NOT EXIST';
   } else if (
     // 덧글 작성자가 아닐때,
-    String(checkReview[0].users_id) !== user_id
+    checkReview[0].users_id !== user_id
   ) {
     return 'ONLY WRITER CAN MODIFY COMMENT';
   } else {
@@ -103,10 +104,10 @@ const deleteReview = async (review_id, user_id) => {
     return 'REVIEW IS NOT EXIST';
   } else if (
     //로그인한 사용자와 댓글 작성자가 다를 경우 에러 발생
-    String(checkReview[0].users_id) !== user_id
+    checkReview[0].users_id !== user_id
   ) {
     return 'ONLY WRITER CAN DELETE COMMENT';
-  } else if (String(checkReview[0].users_id) === user_id) {
+  } else if (checkReview[0].users_id === user_id) {
     await dataSource.query(
       `
       DELETE FROM 

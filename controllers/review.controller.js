@@ -1,35 +1,35 @@
 const reviewService = require('../services/review.service');
+const myUtil = require('../utils/myutil');
 
-const createReview = async (req, res) => {
+async function createReview(req, res) {
   try {
-    const { user_id, books_id, content } = req.body;
+    const user_id = req.userInfo.id;
+    console.log('user_id = ', user_id);
+    const { books_id, content } = req.body;
     // id = 게시물의 id
-    if (!content) {
-      //리뷰 내용이 없을 경우 에러 발생
-      const error = new Error('REVIEW TEXT NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
-    // book id가 없을 경우 에러 발생
-    if (!books_id) {
-      const error = new Error('VALID BOOKS_ID NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
+    myUtil.checkDataIsNotEmpty({
+      books_id,
+      content,
+    });
     const result = await reviewService.createReview(user_id, books_id, content);
     res.status(200).json({
       result,
     });
     console.log('COMMENT POSTED');
   } catch (err) {
-    console.log(err.message);
-    res.status(err.statusCode).json({ message: err.message });
+    console.log(err);
+    res.status(400).json({ message: err.message });
   }
-};
+}
 
 const updateReview = async (req, res) => {
   try {
-    const { review_id, user_id, content } = req.body;
+    const user_id = req.userInfo.id;
+    const { review_id, content } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      review_id,
+      content,
+    });
     const result = await reviewService.updateReview(
       review_id,
       user_id,
@@ -37,14 +37,18 @@ const updateReview = async (req, res) => {
     );
     res.status(200).json({ result });
   } catch (err) {
-    console.log(err.message);
-    res.status(err.statusCode).json({ message: err.message });
+    console.log(err);
+    res.status(400).json({ message: err.message });
   }
 };
 
 const deleteReview = async (req, res) => {
   try {
-    const { review_id, user_id } = req.body;
+    const user_id = req.userInfo.id;
+    const { review_id } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      review_id,
+    });
     const result = await reviewService.deleteReview(review_id, user_id);
     res.status(200).json({ message: result });
   } catch (err) {

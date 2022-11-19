@@ -14,7 +14,7 @@ const findDetailByBookId = async (req, res) => {
 const checkFavoriteAndBookshelf = async (req, res) => {
   try {
     const { id } = req.params;
-    const { user_id } = req.body;
+    const user_id = req.userInfo.id;
     const result = await bookDetailService.checkFavoriteAndBookshelf(
       id,
       user_id

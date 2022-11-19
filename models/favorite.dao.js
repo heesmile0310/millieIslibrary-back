@@ -72,10 +72,10 @@ const removeFavorite = async (user_id, books_id) => {
     return 'FAVORITE IS NOT EXIST';
   } else if (
     //로그인한 사용자와 찜하기 작성자가 다를 경우 에러 발생
-    String(checkFavorite[0].users_id) !== user_id
+    checkFavorite[0].users_id !== user_id
   ) {
     return 'ONLY OWNER CAN DELETE';
-  } else if (String(checkFavorite[0].users_id) === user_id) {
+  } else if (checkFavorite[0].users_id === user_id) {
     await dataSource.query(
       `
       DELETE

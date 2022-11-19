@@ -1,20 +1,13 @@
 const favoriteService = require('../services/favorite.service');
+const myUtil = require('../utils/myutil');
 
 const addFavorite = async (req, res) => {
   try {
-    const { user_id, books_id } = req.body;
-    // id = 게시물의 id
-    if (!user_id) {
-      const error = new Error('LOGIN NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
-    // book id가 없을 경우 에러 발생
-    if (!books_id) {
-      const error = new Error('VALID BOOKS_ID NEEDED');
-      error.statusCode = 404;
-      throw error;
-    }
+    const user_id = req.userInfo.id;
+    const { books_id } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      books_id,
+    });
     const result = await favoriteService.addFavorite(user_id, books_id);
     res.status(200).json({
       result,
@@ -28,7 +21,11 @@ const addFavorite = async (req, res) => {
 
 const removeFavorite = async (req, res) => {
   try {
-    const { user_id, books_id } = req.body;
+    const user_id = req.userInfo.id;
+    const { books_id } = req.body;
+    myUtil.checkDataIsNotEmpty({
+      books_id,
+    });
     const result = await favoriteService.removeFavorite(user_id, books_id);
     res.status(200).json({ message: result });
   } catch (err) {
