@@ -3,7 +3,7 @@ const userDao = require('../models/user.dao');
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken'); // 토큰 발급
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = process.env.SECRET_KEY;
 
 const signUp = async (email, password, nickname) => {
   if (!email.includes('@') || !email.includes('.')) {
@@ -55,7 +55,7 @@ const login = async (email, password) => {
   return token;
 };
 
-const updateInfo = async (password, nickname, token) => {
+const updateInfo = async (password, nickname, user_id) => {
   if (password.length < 10) {
     //비밀번호가 10자리 이상만 가능 아니면 error 날림
     const error = new Error('Password-Invalid');
@@ -63,26 +63,16 @@ const updateInfo = async (password, nickname, token) => {
     throw error;
   }
   const salt = bcrypt.genSaltSync();
-
   const hashedPw = bcrypt.hashSync(password, salt);
-
-  const user = jwt.verify(token, jwtSecret);
-  const user_id = user.id;
 
   await userDao.updateInfo(hashedPw, nickname, user_id);
 };
 
-const withdrawUser = async token => {
-  const user = jwt.verify(token, jwtSecret);
-  const user_id = user.id;
-
+const withdrawUser = async user_id => {
   await userDao.withdrawUser(user_id);
 };
 
-const getMe = async token => {
-  const user = jwt.verify(token, jwtSecret);
-  const user_id = user.id;
-
+const getMe = async user_id => {
   return await userDao.getMe(user_id);
 };
 

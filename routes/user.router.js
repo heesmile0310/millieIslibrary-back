@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { authMiddleware } = require('../middlewares/middleware');
+
 const {
   signUp,
   login,
@@ -11,8 +13,8 @@ const {
 
 router.post('/signup', signUp);
 router.post('/login', login);
-router.patch('/changeinfo', updateInfo);
-router.delete('/withdraw', withdrawUser);
-router.post('/info', getMe);
+router.patch('/changeinfo', authMiddleware, updateInfo);
+router.delete('/withdraw', authMiddleware, withdrawUser);
+router.post('/info', authMiddleware, getMe);
 
 module.exports = router;
