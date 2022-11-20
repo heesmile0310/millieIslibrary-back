@@ -112,7 +112,7 @@ const checkFavoriteAndBookshelf = async (id, user_id) => {
         bookshelves
       WHERE
         books_id = '${id}'
-        AND users_id = '${user_id}')=1, 'TURE', 'FALSE') AS check_bookshelf
+        AND users_id = '${user_id}')=1, 'TRUE', 'FALSE') AS check_bookshelf
     `
   );
 };
