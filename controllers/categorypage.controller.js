@@ -2,7 +2,7 @@ const categorypageService = require('../services/categorypage.service');
 
 const findCategoryAll = async (req, res) => {
   try {
-    let data = await categorypageService.findCategoryAll();
+    const data = await categorypageService.findCategoryAll();
     res.status(200).json({ message: 'success', data });
   } catch (err) {
     res.status(err.statusCode).json({ message: err.message });
@@ -12,7 +12,6 @@ const findCategoryAll = async (req, res) => {
 const searchList = async (req, res) => {
   try {
     const { text } = req.body;
-    console.log(text);
     const data = await categorypageService.searchList(text);
     res.status(200).json({ message: 'success', data });
   } catch (err) {
@@ -30,4 +29,28 @@ const findBooksByCateId = async (req, res) => {
   }
 };
 
-module.exports = { findCategoryAll, searchList, findBooksByCateId };
+const findAuthorRandom = async (req, res) => {
+  try {
+    const data = await categorypageService.findAuthorRandom();
+    res.status(200).json({ message: 'success', data });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+const findBooksRandom = async (req, res) => {
+  try {
+    const data = await categorypageService.findBooksRandom();
+    res.status(200).json({ message: 'success', data });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+module.exports = {
+  findCategoryAll,
+  searchList,
+  findBooksByCateId,
+  findAuthorRandom,
+  findBooksRandom,
+};
