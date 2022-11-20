@@ -10,6 +10,7 @@ const createBook = async book => {
   const {
     title,
     author,
+    authorIntro,
     category,
     coverImg,
     introduction,
@@ -55,7 +56,7 @@ const createBook = async book => {
 
     if (!authorId) {
       // Create author Entity
-      authorId = (await authorDao.createAuthor(author, 'authorIntro')).insertId;
+      authorId = (await authorDao.createAuthor(author, authorIntro)).insertId;
     }
   });
 
@@ -63,4 +64,24 @@ const createBook = async book => {
   await bookDao.createBookAuthor(bookId, authorId);
 };
 
-module.exports = { createBook };
+const findBooks = async (serchOption) => {
+  serchOption = {...serchOption, order: convertOrderFormat(serchOption.order)};
+  return await bookDao.findBooks(serchOption);
+}
+
+const convertOrderFormat = (orderText) => {
+  return orderText?.split(',')?.map( orderItem => {
+    // ex) orderItem = -rating
+    let orderTarget = orderItem;
+    let orderFlag = 'ASC'; // 오름차순
+    const regex = /(^[\-\+])(\w+)/;
+    const found = orderItem.match(regex);
+    if (found) {
+      orderFlag = found[1] == '-' ? 'DESC' : 'ASC';
+      orderTarget = found[2]; // rating
+    }
+    return [orderTarget, orderFlag];
+  })
+}
+
+module.exports = { createBook, findBooks };

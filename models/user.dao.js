@@ -19,7 +19,7 @@ const login = async email => {
   return userInfo;
 };
 
-const changeUserInfo = async (hashedPw, nickname, user_id) => {
+const updateInfo = async (hashedPw, nickname, user_id) => {
   await myDataSource.query(`
   UPDATE 
     users 
@@ -38,4 +38,16 @@ const withdrawUser = async user_id => {
   `);
 };
 
-module.exports = { signUp, login, changeUserInfo, withdrawUser };
+const getMe = async user_id => {
+  let userInfo = await myDataSource.query(`
+    SELECT
+      email, nickname
+    FROM
+      users
+    WHERE
+      id = ${user_id};
+  `);
+  return userInfo;
+};
+
+module.exports = { signUp, login, updateInfo, withdrawUser, getMe };
