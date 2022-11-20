@@ -3,7 +3,7 @@ const userDao = require('../models/user.dao');
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken'); // 토큰 발급
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = process.env.SECRET_KEY;
 
 const signUp = async (email, password, nickname) => {
   if (!email.includes('@') || !email.includes('.')) {

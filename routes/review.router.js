@@ -1,10 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const { asyncWrap } = require('../utils/myutil');
+const mw = require('../middlewares/middleware');
 
-const reviewController = require('../controllers/review.controllers');
+const reviewController = require('../controllers/review.controller');
 
-router.post('', reviewController.createReview);
-router.patch('', reviewController.updateReview);
-router.delete('', reviewController.deleteReview);
+router.post(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.createReview)
+);
+router.patch(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.updateReview)
+);
+router.delete(
+  '',
+  asyncWrap(mw.authMiddleware),
+  asyncWrap(reviewController.deleteReview)
+);
 
 module.exports = router;
