@@ -20,4 +20,11 @@ async function createBook(req, res) {
   res.json('생성 완료');
 }
 
-module.exports = { createBook };
+const findBooks = async (req, res) => {
+  let serchOption = req.query;
+  serchOption = { ...serchOption, booksId: req.params.id };
+  const result = await bookServ.findBooks(serchOption);
+  res.json(result);
+};
+
+module.exports = { createBook, findBooks };
