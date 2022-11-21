@@ -15,4 +15,20 @@ const findBooksByCateId = async category_id => {
   return result;
 };
 
-module.exports = { findCategoryAll, searchList, findBooksByCateId };
+const findAuthorRandom = async () => {
+  let result = await categorypageDao.findAuthorRandom();
+  return result;
+};
+
+const findBooksRandom = async () => {
+  let result = await categorypageDao.findBooksRandom();
+  return result;
+};
+
+module.exports = {
+  findCategoryAll,
+  searchList,
+  findBooksByCateId,
+  findAuthorRandom,
+  findBooksRandom,
+};
