@@ -1,52 +1,68 @@
 const myDataSource = require('../models/index');
 
 const signUp = async (email, hashedPw, nickname) => {
-  await myDataSource.query(`
+  await myDataSource.query(
+    `
     INSERT INTO 
         users ( email, nickname, password)
     VALUES
-        ("${email}", "${nickname}", "${hashedPw}")
-  `);
+        (?, ?, ?)
+    `,
+    [email, nickname, hashedPw]
+  );
 };
 
 const login = async email => {
-  const [userInfo] = await myDataSource.query(`
+  const [userInfo] = await myDataSource.query(
+    `
     SELECT * FROM
       users 
     WHERE
-      email ="${email}"`);
+      email = ?
+    `,
+    [email]
+  );
 
   return userInfo;
 };
 
 const updateInfo = async (hashedPw, nickname, user_id) => {
-  await myDataSource.query(`
-  UPDATE 
-    users 
-  SET
-    password = "${hashedPw}",
-    nickname = "${nickname}"
-  WHERE 
-    id = ${user_id}
-`);
+  await myDataSource.query(
+    `
+    UPDATE 
+      users 
+    SET
+      password = ?,
+      nickname = ?
+    WHERE 
+      id = ?
+  `,
+    [hashedPw, nickname, user_id]
+  );
 };
 
 const withdrawUser = async user_id => {
-  await myDataSource.query(`
+  await myDataSource.query(
+    `
     DELETE FROM users
-    WHERE id = ${user_id}
-  `);
+    WHERE id = ?
+  `,
+    [user_id]
+  );
 };
 
 const getMe = async user_id => {
-  let userInfo = await myDataSource.query(`
+  let userInfo = await myDataSource.query(
+    `
     SELECT
       email, nickname
     FROM
       users
     WHERE
-      id = ${user_id};
-  `);
+      id = ?;
+  `,
+    [user_id]
+  );
   return userInfo;
 };
 

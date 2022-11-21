@@ -1,21 +1,19 @@
 const userDao = require('../models/user.dao');
-
 const bcrypt = require('bcryptjs');
-
 const jwt = require('jsonwebtoken'); // 토큰 발급
 const jwtSecret = process.env.SECRET_KEY;
 
 const signUp = async (email, password, nickname) => {
   if (!email.includes('@') || !email.includes('.')) {
     const error = new Error('Email-Invalid');
-    error.status = 400;
+    error.statusCode = 400;
     throw error;
   }
 
   if (password.length < 10) {
     //비밀번호가 10자리 이상만 가능 아니면 error 날림
     const error = new Error('Password-Invalid');
-    error.status = 400;
+    error.statusCode = 400;
     throw error;
   }
 
@@ -29,12 +27,12 @@ const signUp = async (email, password, nickname) => {
 const login = async (email, password) => {
   if (!email.includes('@') || !email.includes('.')) {
     const error = new Error('Email-Invalid');
-    error.status = 400;
+    error.statusCode = 400;
     throw error;
   }
   if (password.length < 10) {
     const error = new Error('Password-Invalid');
-    error.status = 400;
+    error.statusCode = 400;
     throw error;
   }
 
@@ -59,7 +57,7 @@ const updateInfo = async (password, nickname, user_id) => {
   if (password.length < 10) {
     //비밀번호가 10자리 이상만 가능 아니면 error 날림
     const error = new Error('Password-Invalid');
-    error.status = 400;
+    error.statusCode = 400;
     throw error;
   }
   const salt = bcrypt.genSaltSync();
