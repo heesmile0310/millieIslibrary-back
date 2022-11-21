@@ -3,7 +3,7 @@ const { red } = require('cli-color');
 
 async function authMiddleware(req, _, next) {
   let token = req.headers.authorization;
-  token = token.replace(/^Bearer\s+/, '');
+  token = token.includes('Bearer') ? token.replace(/^Bearer\s+/, '') : token;
   const decodedToken = decodeToken(token);
   req.userInfo = { id: decodedToken.id };
   next();
