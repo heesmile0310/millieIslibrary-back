@@ -5,7 +5,7 @@ const findCategoryAll = async () => {
     SELECT  
       id,
       content,
-      (SELECT cover_img FROM books ORDER BY RAND() LIMIT 1) AS cover_img
+      (SELECT cover_img FROM books WHERE categories.id = books.categories_id ORDER BY RAND() LIMIT 1) AS cover_img
     FROM
       categories
   `);
@@ -14,7 +14,8 @@ const findCategoryAll = async () => {
 };
 
 const searchList = async text => {
-  const result = await myDataSource.query(`
+  const result = await myDataSource.query(
+    `
     SELECT
       id, title
     FROM
@@ -23,12 +24,14 @@ const searchList = async text => {
       (title, ' ', '')
     LIKE
       "${text}%"
-  `);
+  `
+  );
   return result;
 };
 
 const findBooksByCateId = async category_id => {
-  let listInfo = await myDataSource.query(`
+  let listInfo = await myDataSource.query(
+    `
     SELECT
       categories.content,
     JSON_ARRAYAGG(
@@ -54,10 +57,12 @@ const findBooksByCateId = async category_id => {
     ON
       authors.id = books_authors.authors_id
     WHERE
-      categories.id = ${category_id}
+      categories.id = ?
     GROUP BY
       categories.id
-  `);
+  `,
+    [category_id]
+  );
 
   listInfo = [...listInfo].map(item => {
     return { ...item, books: JSON.parse(item.books) };
@@ -84,7 +89,7 @@ const findBooksRandom = async () => {
       books
     WHERE
       CHAR_LENGTH(title) <= 10
-    ORDER BY RAND() LIMIT 10
+    ORDER BY RAND() LIMIT 20
   `);
   return result;
 };
