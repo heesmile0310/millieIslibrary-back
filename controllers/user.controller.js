@@ -9,7 +9,7 @@ const signUp = async (req, res) => {
     nickname,
   };
 
-  await checkDataIsNotEmpty(REQUIRED_KEYS);
+  checkDataIsNotEmpty(REQUIRED_KEYS);
 
   await userService.signUp(email, password, nickname);
 
@@ -22,7 +22,7 @@ const login = async (req, res) => {
     email,
     password,
   };
-  await checkDataIsNotEmpty(REQUIRED_KEYS);
+  checkDataIsNotEmpty(REQUIRED_KEYS);
 
   const token = await userService.login(email, password);
 
@@ -54,4 +54,26 @@ const getMe = async (req, res) => {
   res.status(200).json({ message: 'success', userInfo });
 };
 
-module.exports = { signUp, login, updateInfo, withdrawUser, getMe };
+const changePassword = async (req, res) => {
+  const { email, password } = req.body;
+
+  const REQUIRED_KEYS = {
+    email,
+    password,
+  };
+
+  checkDataIsNotEmpty(REQUIRED_KEYS);
+
+  await userService.changePassword(email, password);
+
+  res.status(200).json({ message: 'success' });
+};
+
+module.exports = {
+  signUp,
+  login,
+  updateInfo,
+  withdrawUser,
+  getMe,
+  changePassword,
+};

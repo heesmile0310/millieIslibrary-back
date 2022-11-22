@@ -74,4 +74,23 @@ const getMe = async user_id => {
   return await userDao.getMe(user_id);
 };
 
-module.exports = { signUp, login, updateInfo, withdrawUser, getMe };
+const changePassword = async (email, password) => {
+  if (password.length < 10) {
+    const error = new Error('Password-Invalid');
+    error.statusCode = 400;
+    throw error;
+  }
+  const salt = bcrypt.genSaltSync();
+  const hashedPw = bcrypt.hashSync(password, salt);
+
+  await userDao.changePassword(email, hashedPw);
+};
+
+module.exports = {
+  signUp,
+  login,
+  updateInfo,
+  withdrawUser,
+  getMe,
+  changePassword,
+};

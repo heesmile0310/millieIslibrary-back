@@ -66,4 +66,25 @@ const getMe = async user_id => {
   return userInfo;
 };
 
-module.exports = { signUp, login, updateInfo, withdrawUser, getMe };
+const changePassword = async (email, hashedPw) => {
+  await myDataSource.query(
+    `
+    UPDATE 
+      users 
+    SET
+      password = ?
+    WHERE 
+      email = ?
+  `,
+    [hashedPw, email]
+  );
+};
+
+module.exports = {
+  signUp,
+  login,
+  updateInfo,
+  withdrawUser,
+  getMe,
+  changePassword,
+};
