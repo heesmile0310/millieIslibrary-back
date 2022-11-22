@@ -1,6 +1,6 @@
 const myDataSource = require('../models/index');
 
-const sendMailForgotPassword = async () => {
+const sendMailForgotPassword = async email => {
   const [userInfo] = await myDataSource.query(
     `
     SELECT * FROM
