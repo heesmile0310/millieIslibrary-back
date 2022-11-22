@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { authMiddleware } = require('../middlewares/middleware');
+const { asyncWrap } = require('../utils/myutil');
 
 const {
   signUp,
@@ -11,10 +12,10 @@ const {
   getMe,
 } = require('../controllers/user.controller');
 
-router.post('/signup', signUp);
-router.post('/login', login);
-router.patch('/changeinfo', authMiddleware, updateInfo);
-router.delete('/withdraw', authMiddleware, withdrawUser);
-router.post('/info', authMiddleware, getMe);
+router.post('/signup', asyncWrap(signUp));
+router.post('/login', asyncWrap(login));
+router.patch('/changeinfo', asyncWrap(authMiddleware), asyncWrap(updateInfo));
+router.delete('/withdraw', asyncWrap(authMiddleware), asyncWrap(withdrawUser));
+router.get('/info', asyncWrap(authMiddleware), asyncWrap(getMe));
 
 module.exports = router;
