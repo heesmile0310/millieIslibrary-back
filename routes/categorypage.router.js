@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const { asyncWrap } = require('../utils/myutil');
+const { authMiddleware } = require('../middlewares/middleware');
+
 const {
   findCategoryAll,
   searchList,
@@ -9,10 +12,10 @@ const {
   findBooksRandom,
 } = require('../controllers/categorypage.controller');
 
-router.get('/info', findCategoryAll);
-router.get('/bookrandom', findBooksRandom);
-router.get('/authorrandom', findAuthorRandom);
-router.post('/search', searchList);
-router.get('/:categoryId', findBooksByCateId);
+router.get('/info', asyncWrap(findCategoryAll));
+router.get('/bookrandom', asyncWrap(findBooksRandom));
+router.get('/authorrandom', asyncWrap(findAuthorRandom));
+router.post('/search', asyncWrap(searchList));
+router.get('/:categoryId', asyncWrap(findBooksByCateId));
 
 module.exports = router;
