@@ -20,7 +20,11 @@ const searchList = async text => {
       id, title
     FROM
       books
-    WHERE REPLACE
+    WHERE title
+    LIKE
+      "${text}%"
+    OR
+    REPLACE
       (title, ' ', '')
     LIKE
       "${text}%"
