@@ -97,27 +97,36 @@ const findDetailByBookId = async id => {
 
 // 찜하기, 담기 체크
 const checkFavoriteAndBookshelf = async (id, user_id) => {
-  return await dataSource.query(
-    `
+  return await dataSource
+    .query(
+      `
     SELECT
-	IF (EXISTS (
-      SELECT
-        id
-      FROM
-        favorites
-      WHERE
-        books_id = '${id}'
-        AND users_id = '${user_id}')=1,'TRUE', 'FALSE') AS check_favorite,
-      IF (EXISTS (
-      SELECT
-        id
-      FROM
-        bookshelves
-      WHERE
-        books_id = '${id}'
-        AND users_id = '${user_id}')=1, 'TRUE', 'FALSE') AS check_bookshelf
+      EXISTS (
+        SELECT
+          id
+        FROM
+          favorites
+        WHERE
+          books_id = '${id}'
+          AND users_id = '${user_id}'
+      ) AS check_favorite,
+      EXISTS (
+          SELECT
+            id
+          FROM
+            bookshelves
+          WHERE
+            books_id = '${id}'
+            AND users_id = '${user_id}'
+      ) AS check_bookshelf
     `
-  );
+    )
+    .then(value => {
+      return {
+        check_favorite: value[0].check_favorite == 1 ? true : false,
+        check_bookshelf: value[0].check_bookshelf == 1 ? true : false,
+      };
+    });
 };
 
 module.exports = { findDetailByBookId, checkFavoriteAndBookshelf };
