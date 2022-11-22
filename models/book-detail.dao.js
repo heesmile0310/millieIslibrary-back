@@ -35,8 +35,9 @@ const findDetailByBookId = async id => {
       authors AS a 
     ON 
       a.id = ba.authors_id
-    WHERE b.id = ${id}
-    `
+    WHERE b.id = ?
+    `,
+    [id]
   );
 
   bookResult = [...bookResult].map(item => {
@@ -57,8 +58,9 @@ const findDetailByBookId = async id => {
     ON
       b.id = r.books_id
     WHERE
-      b.id = ${id}
-    `
+      b.id = ?
+    `,
+    [id]
   );
 
   const reviewArray = await dataSource.query(
@@ -82,10 +84,11 @@ const findDetailByBookId = async id => {
     ON
       r.users_id = u.id
     WHERE
-      b.id = ${id}
+      b.id = ?
     ORDER BY
       r.created_at ASC
-    `
+    `,
+    [id]
   );
   const reviewInfo = { reviewCount, reviewArray };
 
@@ -112,7 +115,7 @@ const checkFavoriteAndBookshelf = async (id, user_id) => {
         bookshelves
       WHERE
         books_id = '${id}'
-        AND users_id = '${user_id}')=1, 'TURE', 'FALSE') AS check_bookshelf
+        AND users_id = '${user_id}')=1, 'TRUE', 'FALSE') AS check_bookshelf
     `
   );
 };
