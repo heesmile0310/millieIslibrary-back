@@ -122,9 +122,10 @@ const checkFavoriteAndBookshelf = async (id, user_id) => {
     `
     )
     .then(value => {
+      const [item] = value;
       return {
-        check_favorite: value[0].check_favorite == 1 ? true : false,
-        check_bookshelf: value[0].check_bookshelf == 1 ? true : false,
+        check_favorite: item.check_favorite == 1,
+        check_bookshelf: item.check_bookshelf == 1,
       };
     });
 };
