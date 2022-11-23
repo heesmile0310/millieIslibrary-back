@@ -111,6 +111,7 @@ const findBooks = async serchOption => {
   const foundBooks = await dataSource.query(
     `
       SELECT
+        books.id,
         title,
         cover_img,
         introduction,
