@@ -1,5 +1,18 @@
 const dataSource = require('.');
 
+const checkBook = async title => {
+  return await dataSource.query(
+    `
+    SELECT
+      *
+    FROM
+      books b
+    WHERE
+      title = "${title}"
+    `
+  );
+};
+
 const createBook = async ({
   title,
   coverImg,
@@ -41,7 +54,6 @@ const createBook = async ({
       page,
     ]
   );
-
   return insertStatus;
 };
 
@@ -83,14 +95,18 @@ const findBooks = async serchOption => {
   }
 
   const NOT_NULL_STATE = 'IS NOT NULL';
-  const categoriesIdState = categoriesId  ? `= '${categoriesId}'` : NOT_NULL_STATE;
-  const authorsIdState    = authorsId     ? `= '${authorsId}'`    : NOT_NULL_STATE;
-  const authorNameState   = authorName    ? `= '${authorName}'`   : NOT_NULL_STATE;
-  const booksIdStateState = booksId       ? `= '${booksId}'`      : NOT_NULL_STATE;
-  const categoryNameState = categoryName  ? `= '${categoryName}'` : NOT_NULL_STATE;
-  const publisherState    = publisher     ? `= '${publisher}'`    : NOT_NULL_STATE;
-  const userIdState       = usersId       ? `= '${usersId}'`      : NOT_NULL_STATE;
-  const limitState        = limit         ? `LIMIT ${limit}`      : '';
+  const categoriesIdState = categoriesId
+    ? `= '${categoriesId}'`
+    : NOT_NULL_STATE;
+  const authorsIdState = authorsId ? `= '${authorsId}'` : NOT_NULL_STATE;
+  const authorNameState = authorName ? `= '${authorName}'` : NOT_NULL_STATE;
+  const booksIdStateState = booksId ? `= '${booksId}'` : NOT_NULL_STATE;
+  const categoryNameState = categoryName
+    ? `= '${categoryName}'`
+    : NOT_NULL_STATE;
+  const publisherState = publisher ? `= '${publisher}'` : NOT_NULL_STATE;
+  const userIdState = usersId ? `= '${usersId}'` : NOT_NULL_STATE;
+  const limitState = limit ? `LIMIT ${limit}` : '';
   const orderPairMap = {
     rating: 'rating_score',
     page: 'page',
@@ -183,4 +199,18 @@ const findBooks = async serchOption => {
   return foundBooks;
 };
 
-module.exports = { createBook, createBookAuthor, findBooks };
+const dbIndexUniqueTitle = async () => {
+  return await dataSource.query(
+    `
+    CREATE UNIQUE INDEX title_idx ON books (title)
+    `
+  );
+};
+
+module.exports = {
+  createBook,
+  createBookAuthor,
+  findBooks,
+  checkBook,
+  dbIndexUniqueTitle,
+};
