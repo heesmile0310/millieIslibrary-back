@@ -4,14 +4,14 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const API_KEY = process.env.API_KEY;
-const ORIGIN_URL = process.env.ORIGIN_URL || "http://localhost:8000";
+const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:8000';
 const booksNum = 50;
 const pages = [1, 2, 3, 4];
 
 // true 로 할 경우
-  // 알라딘에서 항시 최신 정보를 받음
+// 알라딘에서 항시 최신 정보를 받음
 // false 로 할 경우
-  // 알라딘에서 이전에 받았던 정보가 있다면 알라딘에 요청하지 않고 이전에 받았던 정보를 재활용
+// 알라딘에서 이전에 받았던 정보가 있다면 알라딘에 요청하지 않고 이전에 받았던 정보를 재활용
 const USE_CASHED_DATA = false;
 
 function getRandomInt(max) {
@@ -42,7 +42,7 @@ function convertFormat(aladinItem) {
   let convertedItem = {
     title: aladinItem.title,
     author: aladinItem.subInfo.authors[0].authorName,
-    authorIntro: aladinItem.subInfo.authors[0].authorInfo || "저자 소개 없음",
+    authorIntro: aladinItem.subInfo.authors[0].authorInfo || '저자 소개 없음',
     category: aladinItem.categoryName.split('>')[1],
     coverImg: aladinItem.cover,
     introduction: aladinItem.description || '소개 없음',
@@ -98,7 +98,7 @@ const createBookData = async () => {
 };
 
 if (!API_KEY) {
-  console.log("API_KEY 가 필요합니다.");
+  console.log('API_KEY 가 필요합니다.');
   return;
 }
 
