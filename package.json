@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "db": "node ./db/openapi/createbookdata.js"
+    "db": "node ./db/openapi/createbookdata.js",
+    "distribute": "npm i && pm2 start server.js --name millie -i max"
   },
   "author": "",
   "license": "ISC",
