@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `nickname` varchar(50) UNIQUE NOT NULL,
+  `nickname` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) UNIQUE NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT (now()),
