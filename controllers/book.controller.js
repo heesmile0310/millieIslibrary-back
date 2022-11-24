@@ -36,7 +36,7 @@ const findBooks = async (req, res) => {
 };
 
 const dbIndexUniqueTitle = async (req, res) => {
-  const result = await bookServ.dbIndexUniqueTitle;
+  const result = await bookServ.dbIndexUniqueTitle();
   res.json(result);
 };
 

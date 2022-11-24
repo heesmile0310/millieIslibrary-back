@@ -92,7 +92,7 @@ const convertOrderFormat = orderText => {
 };
 
 const dbIndexUniqueTitle = async () => {
-  return await bookDao.dbIndexUniqueTitle;
+  return await bookDao.dbIndexUniqueTitle();
 };
 
 module.exports = { createBook, findBooks, dbIndexUniqueTitle };
