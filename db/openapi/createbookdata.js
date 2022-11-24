@@ -7,7 +7,7 @@ const API_KEY = process.env.API_KEY;
 const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:8000';
 const booksNum = 50;
 const pages = [1, 2, 3, 4];
-const getBooksList = ['ItemNewAll', 'ItemNewSpecial', 'Bestseller', 'BlogBest'];
+const kindOfBooks = ['ItemNewAll', 'ItemNewSpecial', 'Bestseller', 'BlogBest'];
 
 // true 로 할 경우
 // 알라딘에서 항시 최신 정보를 받음
@@ -44,28 +44,10 @@ function getBookPath(idx) {
 }
 
 function convertFormat(aladinItem) {
-  let authorName;
-  function checkAuthorName(property) {
-    property = aladinItem.subInfo.authors[0].authorName;
-    if (!property) {
-      return (authorName = '');
-    } else {
-      return (authorName = aladinItem.subInfo.authors[0].authorName);
-    }
-  }
-  let authorInfo;
-  function checkAuthorName(property) {
-    property = aladinItem.subInfo.authors[0].authorInfo;
-    if (!property) {
-      return (authorInfo = '');
-    } else {
-      return (authorInfo = aladinItem.subInfo.authors[0].authorInfo);
-    }
-  }
   let convertedItem = {
     title: aladinItem.title,
-    author: authorName || aladinItem.author,
-    authorIntro: authorInfo || '저자 소개 없음',
+    author: aladinItem.subInfo?.authors[0]?.authorName || '저자 이름 없음',
+    authorIntro: aladinItem.subInfo?.authors[0]?.authorInfo || '저자 소개 없음',
     category: aladinItem.categoryName.split('>')[1],
     coverImg: aladinItem.cover,
     introduction: aladinItem.description || '소개 없음',
@@ -103,7 +85,7 @@ const dbindex = async () => {
 
 const createBookData = async () => {
   let savingCount = 0;
-  for (list of getBooksList) {
+  for (list of kindOfBooks) {
     for (idx of pages) {
       const responedListDB = await axios.get(getbookListUrl(list, idx));
       for (book of responedListDB.data.item) {
