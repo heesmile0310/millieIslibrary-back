@@ -7,6 +7,7 @@ const API_KEY = process.env.API_KEY;
 const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:8000';
 const booksNum = 50;
 const pages = [1, 2, 3, 4];
+const kindOfBooks = ['ItemNewAll', 'ItemNewSpecial', 'Bestseller', 'BlogBest'];
 
 // true 로 할 경우
 // 알라딘에서 항시 최신 정보를 받음
@@ -26,8 +27,12 @@ const storeData = (data, path) => {
   }
 };
 
-function getbookListUrl(pageNumber) {
-  return `https://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=${API_KEY}&QueryType=ItemNewSpecial&MaxResults=${booksNum}&start=${pageNumber}&SearchTarget=Book&output=js&Version=20131101`;
+function getbookListUrl(getBooksList, pageNumber) {
+  return `https://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=${API_KEY}&QueryType=${getBooksList}&MaxResults=${booksNum}&start=${pageNumber}&SearchTarget=Book&output=js&Version=20131101`;
+}
+
+function getbookListUrl(getBooksList, pageNumber) {
+  return `https://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=${API_KEY}&QueryType=${getBooksList}&MaxResults=${booksNum}&start=${pageNumber}&SearchTarget=Book&output=js&Version=20131101`;
 }
 
 function getBookDetail(isbn13) {
@@ -41,8 +46,8 @@ function getBookPath(idx) {
 function convertFormat(aladinItem) {
   let convertedItem = {
     title: aladinItem.title,
-    author: aladinItem.subInfo.authors[0].authorName,
-    authorIntro: aladinItem.subInfo.authors[0].authorInfo || '저자 소개 없음',
+    author: aladinItem.subInfo?.authors[0]?.authorName || '저자 이름 없음',
+    authorIntro: aladinItem.subInfo?.authors[0]?.authorInfo || '저자 소개 없음',
     category: aladinItem.categoryName.split('>')[1],
     coverImg: aladinItem.cover,
     introduction: aladinItem.description || '소개 없음',
@@ -67,33 +72,47 @@ const postBook = async book => {
     });
 };
 
+const dbindex = async () => {
+  await axios
+    .get(ORIGIN_URL + '/books/dbindex')
+    .then(v => {
+      console.log(`indexed`);
+    })
+    .catch(e => {
+      console.log(`wrong indexing`);
+    });
+};
+
 const createBookData = async () => {
   let savingCount = 0;
-  for (idx of pages) {
-    const responedListDB = await axios.get(getbookListUrl(idx));
-    for (book of responedListDB.data.item) {
-      let responedBookDB;
-      const bookPath = getBookPath(++savingCount);
-      if (false === fs.existsSync(bookPath) || !USE_CASHED_DATA) {
-        responedBookDB = (await axios.get(getBookDetail(book.isbn13))).data;
-        if (!responedBookDB.item) {
-          continue;
+  for (list of kindOfBooks) {
+    for (idx of pages) {
+      const responedListDB = await axios.get(getbookListUrl(list, idx));
+      for (book of responedListDB.data.item) {
+        let responedBookDB;
+        const bookPath = getBookPath(++savingCount);
+        if (false === fs.existsSync(bookPath) || !USE_CASHED_DATA) {
+          responedBookDB = (await axios.get(getBookDetail(book.isbn13))).data;
+          if (!responedBookDB.item) {
+            continue;
+          }
+          storeData(responedBookDB, bookPath);
+        } else {
+          let rawdata = fs.readFileSync(bookPath);
+          responedBookDB = JSON.parse(rawdata);
         }
-        storeData(responedBookDB, bookPath);
-      } else {
-        let rawdata = fs.readFileSync(bookPath);
-        responedBookDB = JSON.parse(rawdata);
-      }
 
-      const detailBook = {
-        ...responedBookDB,
-        ...responedBookDB.item[0],
-        item: undefined,
-      };
-      const millyBook = convertFormat(detailBook);
-      await postBook(millyBook);
+        const detailBook = {
+          ...responedBookDB,
+          ...responedBookDB.item[0],
+          item: undefined,
+        };
+        const millyBook = convertFormat(detailBook);
+        await postBook(millyBook);
+      }
     }
   }
+  await dbindex();
   return;
 };
 
