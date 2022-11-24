@@ -1,6 +1,6 @@
 const dataSource = require('.');
 
-const checkBook = async title => {
+const findBooksByTitle = async title => {
   return await dataSource.query(
     `
     SELECT
@@ -211,6 +211,6 @@ module.exports = {
   createBook,
   createBookAuthor,
   findBooks,
-  checkBook,
+  findBooksByTitle,
   dbIndexUniqueTitle,
 };

@@ -20,7 +20,7 @@ const createBook = async book => {
     page,
   } = book;
 
-  let [checkBook] = await bookDao.checkBook(title);
+  let [checkBook] = await bookDao.findBooksByTitle(title);
   console.log('checkbox =', checkBook);
   if (!checkBook) {
     let categoryId;
