@@ -46,12 +46,12 @@ function getBookPath(idx) {
 function convertFormat(aladinItem) {
   let convertedItem = {
     title: aladinItem.title,
-    author: aladinItem.subInfo?.authors[0]?.authorName || '저자 이름 없음',
-    authorIntro: aladinItem.subInfo?.authors[0]?.authorInfo || '저자 소개 없음',
+    author: aladinItem.subInfo?.authors[0]?.authorName || undefined,
+    authorIntro: aladinItem.subInfo?.authors[0]?.authorInfo || undefined,
     category: aladinItem.categoryName.split('>')[1],
     coverImg: aladinItem.cover,
-    introduction: aladinItem.description || '소개 없음',
-    toc: aladinItem.subInfo.toc || '목차 없음',
+    introduction: aladinItem.description || undefined,
+    toc: aladinItem.subInfo.toc || undefined,
     publishTime: aladinItem.pubDate,
     publisher: aladinItem.publisher,
     ratingScore: getRandomInt(100) * 0.1,
@@ -107,7 +107,17 @@ const createBookData = async () => {
           ...responedBookDB.item[0],
           item: undefined,
         };
+
         const millyBook = convertFormat(detailBook);
+
+        const { author, authorIntro, introduction, toc } = millyBook;
+        if (true === (!author || !authorIntro || !introduction || !toc)) {
+          console.log(
+            'something is none in here author, authorIntro, introduction, toc'
+          );
+          continue;
+        }
+
         await postBook(millyBook);
       }
     }
